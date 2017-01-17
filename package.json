@@ -1,0 +1,45 @@
+{
+  "name": "igotnext",
+  "version": "1.0.0",
+  "description": "Find and host local pick up games",
+  "main": "./Server/igotnext.js",
+  "scripts": {
+    "start" : "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rnesh90/iGotNext.git"
+  },
+  "author": "",
+  "license": "ISC",
+   "dependencies": {
+    "axios": "^0.15.3",
+    "bcrypt-nodejs": "0.0.3",
+    "bluebird": "^3.4.7",
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "express-partials": "^0.3.0",
+    "express-session": "^1.14.2",
+    "jquery": "^3.1.1",
+    "mongoose": "^4.7.6",
+    "node": "0.0.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "require": "^2.4.20",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.21.0",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0"
+  },
+  "bugs": {
+    "url": "https://github.com/rnesh90/iGotNext/issues"
+  },
+  "homepage": "https://github.com/rnesh90/iGotNext#readme"
+}
