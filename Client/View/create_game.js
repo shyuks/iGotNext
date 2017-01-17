@@ -10,11 +10,11 @@ class CreateGame extends Component {
     }
     this.handleEventSubmit = this.handleEventSubmit.bind(this);
   }
+  
   handleEventSubmit(event){
     event.preventDefault();
     console.log('clicked');
     
-
     var game = {
       title : document.getElementById("title").value,
       description : document.getElementById("description").value,
@@ -66,6 +66,7 @@ class CreateGame extends Component {
             <input id="zip" type="text"/>
           </label>
           <button type="submit">Submit Game</button>
+          <button onClick={()=>this.props.changeView()}>Cancel</button>
         </form>
       </div>
     )

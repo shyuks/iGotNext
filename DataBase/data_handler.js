@@ -13,7 +13,7 @@ exports.createUser = (inputUser, inputPass, cb) => {
         username : inputUser,
         password : inputPass
       }).then(createdUser => {
-        cb(false, {created : true, id : createdUser._id})
+        cb(false, {created : true, id : createdUser._id, name:createdUser.username})
       }).catch(error => {
         console.log('in create error', error);
         cb(error)
@@ -34,7 +34,7 @@ exports.userLogin = (inputUser, inputPass, cb) => {
       User.comparePassword(inputPass, foundUser.password)
       .then(isMatch => {
         if (isMatch) {
-          cb(false, foundUser._id);
+          cb(false, {id:foundUser._id, name: foundUser.username});
         } else {
           cb('Invalid username/password combination');
         }

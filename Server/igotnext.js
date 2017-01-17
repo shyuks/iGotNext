@@ -15,13 +15,13 @@ app.use(parser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../')));
 
 app.use(session({
-  secret : "This is a secret",
+  secret : "allGames",
   resave: false,
   saveUninitialized: true
 }));
 
 app.get('/checkSession', (req, res) => {
-  res.send(req.session.user);
+  res.send({id : req.session.user, name: req.session.userName});
 });
 
 app.post('/signup', function(req, res){
@@ -36,6 +36,7 @@ app.post('/signup', function(req, res){
       res.status(500).send(err);
     }else {
       req.session.user = result.id;
+      req.session.userName = result.name;
       res.status(200).json(result);
     }
   });
@@ -46,11 +47,13 @@ app.post('/login', (req, res) => {
   var password = req.body.password;
 
   dataHandler.userLogin(username, password, (err, result) => {
+    console.log(result)
     if (err) {
       console.log(err);
       res.status(500).json(err);
     } else {
-      req.session.user = result;
+      req.session.user = result.id;
+      req.session.userName = result.name;
       res.status(200).json(result);
     }
   })

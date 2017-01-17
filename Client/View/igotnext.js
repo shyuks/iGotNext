@@ -11,12 +11,14 @@ class IGotNext extends Component {
     super(props);
     this.state = {
       userId : null,
+      userName : null,
       location : null,
       sport : null,
       login_signup_view : false,
-      create_game_view: false
+      create_game_view: false,
+      mounted : false
     }
-    this.componentDidMount = this.componentDidMount.bind(this);
+    this.componentWillMount = this.componentWillMount.bind(this);
     this.handleUserSeach = this.handleUserSeach.bind(this);
     this.handleUserSignupLogin = this.handleUserSignupLogin.bind(this);
     this.handleUserLogout = this.handleUserLogout.bind(this);
@@ -24,21 +26,25 @@ class IGotNext extends Component {
     this.handleSignupLoginView = this.handleSignupLoginView.bind(this);
   }
 
- componentDidMount(){
+ componentWillMount(){
    axios.get('/checkSession')
    .then(res => {
      this.setState({
-       userId : res.data
+       userId : res.data.id,
+       userName : res.data.name,
+       mounted : true
      })
+     console.log(this.state.userName);
    })
    .catch(err => {
      console.log(err);
    })
  }
 
- handleUserSignupLogin(inputID){
+ handleUserSignupLogin(res){
    this.setState({
-     userId : inputID,
+     userId : res.data.id,
+     userName : res.data.name,
      login_signup_view  : false
    })
  }
@@ -48,7 +54,8 @@ class IGotNext extends Component {
    axios.post('/logout')
    .then(res => {
      self.setState({
-       userId : null
+       userId : null,
+       userName : null
      })
    })
    .catch(err => {
@@ -76,39 +83,49 @@ class IGotNext extends Component {
   }
 
   render() {
-    if (this.state.create_game_view) {
-      return (
-        <CreateGame 
-          user={this.state.userId} 
-          changeView={this.handleCreateGameView}/>
-      )
-    } else if (this.state.login_signup_view) {
-      return (
-        < UserLoginSignup 
-        userSignupLogin={this.handleUserSignupLogin}/> 
-      )
-    } else if (this.state.userId) {
-      return (
-        <div>
-          < UserSession 
+    if(this.state.mounted) {
+      if (this.state.create_game_view) {
+        return (
+          <CreateGame 
             user={this.state.userId} 
-            logout={this.handleUserLogout} 
-            loginSignup={null}
-            createGame={this.handleCreateGameView}/>
-          < GameSearch handleSearch={this.handleUserSeach} />
-          < Games location={this.state.location} sport={this.state.sport} />
-        </div>
-      )
+            changeView={this.handleCreateGameView}/>
+        )
+      } else if (this.state.login_signup_view) {
+        return (
+          < UserLoginSignup 
+          userSignupLogin={this.handleUserSignupLogin}/> 
+        )
+      } else if (this.state.userId) {
+        return (
+          <div>
+            <h1>{this.state.userName}</h1>
+            < UserSession 
+              user={this.state.userId} 
+              logout={this.handleUserLogout} 
+              loginSignup={null}
+              createGame={this.handleCreateGameView}/>
+            < GameSearch handleSearch={this.handleUserSeach} />
+            < Games location={this.state.location} sport={this.state.sport} />
+          </div>
+        )
+      } else {
+        return (
+          <div>
+            <h1>Create an account to post games!</h1>
+            < UserSession 
+            user={false} 
+            logout={null} 
+            loginSignup={this.handleSignupLoginView}
+            createGame={null}/>
+            < GameSearch handleSearch={this.handleUserSeach} />
+            < Games location={this.state.location} sport={this.state.sport} />
+          </div>
+        )
+      }
+    
     } else {
       return (
         <div>
-          < UserSession 
-          user={false} 
-          logout={null} 
-          loginSignup={this.handleSignupLoginView}
-          createGame={null}/>
-          < GameSearch handleSearch={this.handleUserSeach} />
-          < Games location={this.state.location} sport={this.state.sport} />
         </div>
       )
     }

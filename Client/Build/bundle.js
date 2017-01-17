@@ -21554,12 +21554,14 @@
 
 	    _this.state = {
 	      userId: null,
+	      userName: null,
 	      location: null,
 	      sport: null,
 	      login_signup_view: false,
-	      create_game_view: false
+	      create_game_view: false,
+	      mounted: false
 	    };
-	    _this.componentDidMount = _this.componentDidMount.bind(_this);
+	    _this.componentWillMount = _this.componentWillMount.bind(_this);
 	    _this.handleUserSeach = _this.handleUserSeach.bind(_this);
 	    _this.handleUserSignupLogin = _this.handleUserSignupLogin.bind(_this);
 	    _this.handleUserLogout = _this.handleUserLogout.bind(_this);
@@ -21569,23 +21571,27 @@
 	  }
 
 	  _createClass(IGotNext, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
 	      var _this2 = this;
 
 	      _axios2.default.get('/checkSession').then(function (res) {
 	        _this2.setState({
-	          userId: res.data
+	          userId: res.data.id,
+	          userName: res.data.name,
+	          mounted: true
 	        });
+	        console.log(_this2.state.userName);
 	      }).catch(function (err) {
 	        console.log(err);
 	      });
 	    }
 	  }, {
 	    key: 'handleUserSignupLogin',
-	    value: function handleUserSignupLogin(inputID) {
+	    value: function handleUserSignupLogin(res) {
 	      this.setState({
-	        userId: inputID,
+	        userId: res.data.id,
+	        userName: res.data.name,
 	        login_signup_view: false
 	      });
 	    }
@@ -21595,7 +21601,8 @@
 	      var self = this;
 	      _axios2.default.post('/logout').then(function (res) {
 	        self.setState({
-	          userId: null
+	          userId: null,
+	          userName: null
 	        });
 	      }).catch(function (err) {
 	        console.log(err);
@@ -21626,37 +21633,51 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      if (this.state.create_game_view) {
-	        return _react2.default.createElement(_create_game2.default, {
-	          user: this.state.userId,
-	          changeView: this.handleCreateGameView });
-	      } else if (this.state.login_signup_view) {
-	        return _react2.default.createElement(_login_signup2.default, {
-	          userSignupLogin: this.handleUserSignupLogin });
-	      } else if (this.state.userId) {
-	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement(_user_session2.default, {
+	      if (this.state.mounted) {
+	        if (this.state.create_game_view) {
+	          return _react2.default.createElement(_create_game2.default, {
 	            user: this.state.userId,
-	            logout: this.handleUserLogout,
-	            loginSignup: null,
-	            createGame: this.handleCreateGameView }),
-	          _react2.default.createElement(_game_search2.default, { handleSearch: this.handleUserSeach }),
-	          _react2.default.createElement(_games2.default, { location: this.state.location, sport: this.state.sport })
-	        );
+	            changeView: this.handleCreateGameView });
+	        } else if (this.state.login_signup_view) {
+	          return _react2.default.createElement(_login_signup2.default, {
+	            userSignupLogin: this.handleUserSignupLogin });
+	        } else if (this.state.userId) {
+	          return _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	              'h1',
+	              null,
+	              this.state.userName
+	            ),
+	            _react2.default.createElement(_user_session2.default, {
+	              user: this.state.userId,
+	              logout: this.handleUserLogout,
+	              loginSignup: null,
+	              createGame: this.handleCreateGameView }),
+	            _react2.default.createElement(_game_search2.default, { handleSearch: this.handleUserSeach }),
+	            _react2.default.createElement(_games2.default, { location: this.state.location, sport: this.state.sport })
+	          );
+	        } else {
+	          return _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	              'h1',
+	              null,
+	              'Create an account to post games!'
+	            ),
+	            _react2.default.createElement(_user_session2.default, {
+	              user: false,
+	              logout: null,
+	              loginSignup: this.handleSignupLoginView,
+	              createGame: null }),
+	            _react2.default.createElement(_game_search2.default, { handleSearch: this.handleUserSeach }),
+	            _react2.default.createElement(_games2.default, { location: this.state.location, sport: this.state.sport })
+	          );
+	        }
 	      } else {
-	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          _react2.default.createElement(_user_session2.default, {
-	            user: false,
-	            logout: null,
-	            loginSignup: this.handleSignupLoginView,
-	            createGame: null }),
-	          _react2.default.createElement(_game_search2.default, { handleSearch: this.handleUserSeach }),
-	          _react2.default.createElement(_games2.default, { location: this.state.location, sport: this.state.sport })
-	        );
+	        return _react2.default.createElement('div', null);
 	      }
 	    }
 	  }]);
@@ -23336,37 +23357,6 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// class UserSession extends Component {
-	//   constructor(props){
-	//     super(props)
-	//     this.state = {
-	//       userId : this.props.user
-	//     }
-	//     this.handleLoginSignupClick = this.handleLoginSignupClick.bind(this);
-	//   }
-
-	// handleLoginSignupClick(){
-	//   this.props.loginSignup();
-	// }
-	//   render(){
-	//     console.log("user from session render", this.props.user)
-	//     if (this.props.user) {
-	//       return (
-	//         <div>
-	//           <button id="logout" onClick={()=>this.props.logout()}>Logout</button>
-	//           <button id="create-game" onClick={()=>this.props.createGame()}>Create Game</button>
-	//         </div>
-	//       )
-	//     } else {
-	//       return (
-	//         <div>
-	//           <button id="login_signup" onClick={()=>this.handleLoginSignupClick()}>Login/Signup</button>
-	//         </div>
-	//       )
-	//     }
-	//   }
-	// }
-
 	var UserSession = function UserSession(_ref) {
 	  var user = _ref.user,
 	      logout = _ref.logout,
@@ -23643,6 +23633,8 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this3 = this;
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -23695,6 +23687,13 @@
 	            'button',
 	            { type: 'submit' },
 	            'Submit Game'
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { onClick: function onClick() {
+	                return _this3.props.changeView();
+	              } },
+	            'Cancel'
 	          )
 	        )
 	      );
