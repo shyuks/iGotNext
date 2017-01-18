@@ -51,13 +51,9 @@ exports.userLogin = (inputUser, inputPass, cb) => {
 
 
 exports.postEvent = (game, inputUser, cb) => {
-    console.log(game.title);
   if (!inputUser) {
     cb('Session Timed Out');
   } else {
-    User.find({_id : inputUser})
-    .then(foundUser=>{
-      console.log('found user in post event', foundUser);
         Game.create({
           title : game.title,
           description : game.description,
@@ -66,19 +62,15 @@ exports.postEvent = (game, inputUser, cb) => {
           state : game.state,
           zipcode : game.zipcode,
           sport : game.sport,
-          user : foundUser._id
+          userId : inputUser
         })
         .then(game => {
           console.log('created game', game)
           cb(false, game);
         })
-        .catch(error => {
+        .catch(err => {
           cb(err);
         })
-    })
-    .catch(err => {
-      cb(err);
-    })
   }
 }
 
@@ -99,4 +91,29 @@ exports.getGames = (search, cb) => {
       cb(error);
     })
   }
+}
+
+exports.getUserGames = (inputId, cb) => {
+  Game.find({userId : inputId})
+  .then(res => {
+    cb(false, {id: inputId, games: res});
+  })
+  .catch(error => {
+    cb(error);
+  })
+}
+
+exports.deleteGame = (inputUser, inputGameId, cb) => {
+  console.log('entered data handler delete game');
+  Game.remove({
+    userId : inputUser,
+    _id : inputGameId
+  })
+  .then( result => {
+    console.log('in succesul delete in data handler delete game');
+    cb(false, 'Successful Remove!');
+  })
+  .catch(error=>{
+    cb(error, null);
+  })
 }

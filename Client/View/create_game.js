@@ -13,7 +13,6 @@ class CreateGame extends Component {
   
   handleEventSubmit(event){
     event.preventDefault();
-    console.log('clicked');
     
     var game = {
       title : document.getElementById("title").value,
@@ -43,30 +42,31 @@ class CreateGame extends Component {
   render(){
     return (
       <div>
+        <h3>Enter game information</h3>
         <form id="user-game-input-form" onSubmit={this.handleEventSubmit}>
           <label> Title:
-            <input id="title" type="text"/>
+            <input id="title" type="text" required={true}/>
           </label>
           <label> Description:
-            <textarea id="description" type="text"/>
+            <input id="description" type="text"/>
           </label>
           <label> Sport:
-            <textarea id="sport" type="text"/>
+            <input id="sport" type="text" required={true}/>
           </label>
           <label> Street Address:
-            <input id="street-address" type="text"/>
+            <input id="street-address" type="text" required={true}/>
           </label>
           <label> City:
-            <input id="city" type="text"/>
+            <input id="city" type="text" required={true}/>
           </label>
           <label> State:
-            <input id="state" type="text"/>
+            <input id="state" type="text" required={true}/>
           </label>
           <label> Zipcode:
-            <input id="zip" type="text"/>
+            <input id="zip" type="text" required={true}/>
           </label>
           <button type="submit">Submit Game</button>
-          <button onClick={()=>this.props.changeView()}>Cancel</button>
+          <button onClick={(e)=>{e.preventDefault(); this.props.changeView()}}>Cancel</button>
         </form>
       </div>
     )

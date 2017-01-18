@@ -29,15 +29,15 @@ app.post('/signup', function(req, res){
   var password = req.body.password;
   
   dataHandler.createUser(username, password, (err, result) => {
-    if(err === 'User Already Exists!'){
+    if (result.created) {
+        req.session.user = result.id;
+        req.session.userName = result.name;
+        res.status(200).json(result);
+    } else if (err === 'User Already Exists!') {
       console.log(err);
       res.status(200).json(err);
-    } else if (err) {
+    } else {
       res.status(500).send(err);
-    }else {
-      req.session.user = result.id;
-      req.session.userName = result.name;
-      res.status(200).json(result);
     }
   });
 });
@@ -89,6 +89,27 @@ app.get('/getGames', (req, res) => {
   })
 })
 
+app.get('/userGames', (req, res) => {
+  dataHandler.getUserGames(req.session.user, (err, result)=>{
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).json(result);
+    }
+  })
+})
+
+app.post('/deleteGame', (req, res)=>{
+  console.log('entered server delte game')
+  dataHandler.deleteGame(req.session.user, req.body.game, (error, result)=>{
+    console.log('entered server delete game call back');
+    if (error) {
+      res.status(500).send(error);
+    } else {
+      res.status(200).json(result);
+    }
+  })
+})
 
 
 app.listen(3000, ()=>{

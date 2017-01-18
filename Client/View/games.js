@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Game from './game.js';
 import axios from 'axios';
 
+
 class Games extends Component {
   constructor(props){
     super(props)
@@ -36,9 +37,10 @@ class Games extends Component {
       )
     } else {
       return (
-        <div>{
-          this.state.games.map((game, index) => {
-            return <Game key={index} game={game}/>
+        <div>
+          {
+           this.state.games.map((game, index) => {
+           return <Game key={index} game={game}/>
           })
         }
         </div>

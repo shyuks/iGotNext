@@ -21512,29 +21512,33 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _axios = __webpack_require__(181);
+	var _axios = __webpack_require__(179);
 
 	var _axios2 = _interopRequireDefault(_axios);
 
-	var _login_signup = __webpack_require__(206);
+	var _login_signup = __webpack_require__(204);
 
 	var _login_signup2 = _interopRequireDefault(_login_signup);
 
-	var _create_game = __webpack_require__(210);
+	var _create_game = __webpack_require__(205);
 
 	var _create_game2 = _interopRequireDefault(_create_game);
 
-	var _games = __webpack_require__(208);
+	var _games = __webpack_require__(206);
 
 	var _games2 = _interopRequireDefault(_games);
 
-	var _user_session = __webpack_require__(207);
+	var _user_session = __webpack_require__(208);
 
 	var _user_session2 = _interopRequireDefault(_user_session);
 
-	var _game_search = __webpack_require__(211);
+	var _game_search = __webpack_require__(209);
 
 	var _game_search2 = _interopRequireDefault(_game_search);
+
+	var _user_games = __webpack_require__(210);
+
+	var _user_games2 = _interopRequireDefault(_user_games);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21559,6 +21563,7 @@
 	      sport: null,
 	      login_signup_view: false,
 	      create_game_view: false,
+	      user_games_view: false,
 	      mounted: false
 	    };
 	    _this.componentWillMount = _this.componentWillMount.bind(_this);
@@ -21567,6 +21572,7 @@
 	    _this.handleUserLogout = _this.handleUserLogout.bind(_this);
 	    _this.handleCreateGameView = _this.handleCreateGameView.bind(_this);
 	    _this.handleSignupLoginView = _this.handleSignupLoginView.bind(_this);
+	    _this.handleUserGamesView = _this.handleUserGamesView.bind(_this);
 	    return _this;
 	  }
 
@@ -21581,7 +21587,6 @@
 	          userName: res.data.name,
 	          mounted: true
 	        });
-	        console.log(_this2.state.userName);
 	      }).catch(function (err) {
 	        console.log(err);
 	      });
@@ -21590,9 +21595,9 @@
 	    key: 'handleUserSignupLogin',
 	    value: function handleUserSignupLogin(res) {
 	      this.setState({
-	        userId: res.data.id,
-	        userName: res.data.name,
-	        login_signup_view: false
+	        userId: res.id,
+	        userName: res.name,
+	        login_signup_view: !this.state.login_signup_view
 	      });
 	    }
 	  }, {
@@ -21627,7 +21632,14 @@
 	    key: 'handleSignupLoginView',
 	    value: function handleSignupLoginView() {
 	      this.setState({
-	        login_signup_view: true
+	        login_signup_view: !this.state.login_signup_view
+	      });
+	    }
+	  }, {
+	    key: 'handleUserGamesView',
+	    value: function handleUserGamesView() {
+	      this.setState({
+	        user_games_view: !this.state.user_games_view
 	      });
 	    }
 	  }, {
@@ -21640,21 +21652,27 @@
 	            changeView: this.handleCreateGameView });
 	        } else if (this.state.login_signup_view) {
 	          return _react2.default.createElement(_login_signup2.default, {
-	            userSignupLogin: this.handleUserSignupLogin });
+	            userSignupLogin: this.handleUserSignupLogin,
+	            cancel: this.handleSignupLoginView });
+	        } else if (this.state.user_games_view) {
+	          return _react2.default.createElement(_user_games2.default, { home: this.handleUserGamesView });
 	        } else if (this.state.userId) {
 	          return _react2.default.createElement(
 	            'div',
 	            null,
 	            _react2.default.createElement(
-	              'h1',
+	              'h3',
 	              null,
-	              this.state.userName
+	              'Welcome back ',
+	              this.state.userName,
+	              '!'
 	            ),
 	            _react2.default.createElement(_user_session2.default, {
 	              user: this.state.userId,
 	              logout: this.handleUserLogout,
 	              loginSignup: null,
-	              createGame: this.handleCreateGameView }),
+	              createGame: this.handleCreateGameView,
+	              viewUserGames: this.handleUserGamesView }),
 	            _react2.default.createElement(_game_search2.default, { handleSearch: this.handleUserSeach }),
 	            _react2.default.createElement(_games2.default, { location: this.state.location, sport: this.state.sport })
 	          );
@@ -21663,15 +21681,16 @@
 	            'div',
 	            null,
 	            _react2.default.createElement(
-	              'h1',
+	              'h3',
 	              null,
-	              'Create an account to post games!'
+	              'Log in or create an account to post games!'
 	            ),
 	            _react2.default.createElement(_user_session2.default, {
 	              user: false,
 	              logout: null,
 	              loginSignup: this.handleSignupLoginView,
-	              createGame: null }),
+	              createGame: null,
+	              viewUserGames: null }),
 	            _react2.default.createElement(_game_search2.default, { handleSearch: this.handleUserSeach }),
 	            _react2.default.createElement(_games2.default, { location: this.state.location, sport: this.state.sport })
 	          );
@@ -21688,23 +21707,21 @@
 	exports.default = IGotNext;
 
 /***/ },
-/* 179 */,
-/* 180 */,
-/* 181 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(182);
+	module.exports = __webpack_require__(180);
 
 /***/ },
-/* 182 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(183);
-	var bind = __webpack_require__(184);
-	var Axios = __webpack_require__(185);
-	var defaults = __webpack_require__(186);
+	var utils = __webpack_require__(181);
+	var bind = __webpack_require__(182);
+	var Axios = __webpack_require__(183);
+	var defaults = __webpack_require__(184);
 
 	/**
 	 * Create an instance of Axios
@@ -21737,15 +21754,15 @@
 	};
 
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(203);
-	axios.CancelToken = __webpack_require__(204);
-	axios.isCancel = __webpack_require__(200);
+	axios.Cancel = __webpack_require__(201);
+	axios.CancelToken = __webpack_require__(202);
+	axios.isCancel = __webpack_require__(198);
 
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(205);
+	axios.spread = __webpack_require__(203);
 
 	module.exports = axios;
 
@@ -21754,12 +21771,12 @@
 
 
 /***/ },
-/* 183 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var bind = __webpack_require__(184);
+	var bind = __webpack_require__(182);
 
 	/*global toString:true*/
 
@@ -22059,7 +22076,7 @@
 
 
 /***/ },
-/* 184 */
+/* 182 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22076,17 +22093,17 @@
 
 
 /***/ },
-/* 185 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(186);
-	var utils = __webpack_require__(183);
-	var InterceptorManager = __webpack_require__(197);
-	var dispatchRequest = __webpack_require__(198);
-	var isAbsoluteURL = __webpack_require__(201);
-	var combineURLs = __webpack_require__(202);
+	var defaults = __webpack_require__(184);
+	var utils = __webpack_require__(181);
+	var InterceptorManager = __webpack_require__(195);
+	var dispatchRequest = __webpack_require__(196);
+	var isAbsoluteURL = __webpack_require__(199);
+	var combineURLs = __webpack_require__(200);
 
 	/**
 	 * Create a new instance of Axios
@@ -22167,13 +22184,13 @@
 
 
 /***/ },
-/* 186 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(183);
-	var normalizeHeaderName = __webpack_require__(187);
+	var utils = __webpack_require__(181);
+	var normalizeHeaderName = __webpack_require__(185);
 
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -22190,10 +22207,10 @@
 	  var adapter;
 	  if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(188);
+	    adapter = __webpack_require__(186);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(188);
+	    adapter = __webpack_require__(186);
 	  }
 	  return adapter;
 	}
@@ -22267,12 +22284,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 187 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(183);
+	var utils = __webpack_require__(181);
 
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -22285,18 +22302,18 @@
 
 
 /***/ },
-/* 188 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(183);
-	var settle = __webpack_require__(189);
-	var buildURL = __webpack_require__(192);
-	var parseHeaders = __webpack_require__(193);
-	var isURLSameOrigin = __webpack_require__(194);
-	var createError = __webpack_require__(190);
-	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(195);
+	var utils = __webpack_require__(181);
+	var settle = __webpack_require__(187);
+	var buildURL = __webpack_require__(190);
+	var parseHeaders = __webpack_require__(191);
+	var isURLSameOrigin = __webpack_require__(192);
+	var createError = __webpack_require__(188);
+	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(193);
 
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -22392,7 +22409,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(196);
+	      var cookies = __webpack_require__(194);
 
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -22469,12 +22486,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 189 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var createError = __webpack_require__(190);
+	var createError = __webpack_require__(188);
 
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -22500,12 +22517,12 @@
 
 
 /***/ },
-/* 190 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var enhanceError = __webpack_require__(191);
+	var enhanceError = __webpack_require__(189);
 
 	/**
 	 * Create an Error with the specified message, config, error code, and response.
@@ -22523,7 +22540,7 @@
 
 
 /***/ },
-/* 191 */
+/* 189 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22548,12 +22565,12 @@
 
 
 /***/ },
-/* 192 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(183);
+	var utils = __webpack_require__(181);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -22622,12 +22639,12 @@
 
 
 /***/ },
-/* 193 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(183);
+	var utils = __webpack_require__(181);
 
 	/**
 	 * Parse headers into an object
@@ -22665,12 +22682,12 @@
 
 
 /***/ },
-/* 194 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(183);
+	var utils = __webpack_require__(181);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -22739,7 +22756,7 @@
 
 
 /***/ },
-/* 195 */
+/* 193 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22781,12 +22798,12 @@
 
 
 /***/ },
-/* 196 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(183);
+	var utils = __webpack_require__(181);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -22840,12 +22857,12 @@
 
 
 /***/ },
-/* 197 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(183);
+	var utils = __webpack_require__(181);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -22898,15 +22915,15 @@
 
 
 /***/ },
-/* 198 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(183);
-	var transformData = __webpack_require__(199);
-	var isCancel = __webpack_require__(200);
-	var defaults = __webpack_require__(186);
+	var utils = __webpack_require__(181);
+	var transformData = __webpack_require__(197);
+	var isCancel = __webpack_require__(198);
+	var defaults = __webpack_require__(184);
 
 	/**
 	 * Throws a `Cancel` if cancellation has been requested.
@@ -22983,12 +23000,12 @@
 
 
 /***/ },
-/* 199 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(183);
+	var utils = __webpack_require__(181);
 
 	/**
 	 * Transform the data for a request or a response
@@ -23009,7 +23026,7 @@
 
 
 /***/ },
-/* 200 */
+/* 198 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23020,7 +23037,7 @@
 
 
 /***/ },
-/* 201 */
+/* 199 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23040,7 +23057,7 @@
 
 
 /***/ },
-/* 202 */
+/* 200 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23058,7 +23075,7 @@
 
 
 /***/ },
-/* 203 */
+/* 201 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23083,12 +23100,12 @@
 
 
 /***/ },
-/* 204 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Cancel = __webpack_require__(203);
+	var Cancel = __webpack_require__(201);
 
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -23146,7 +23163,7 @@
 
 
 /***/ },
-/* 205 */
+/* 203 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23179,7 +23196,7 @@
 
 
 /***/ },
-/* 206 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23194,7 +23211,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _axios = __webpack_require__(181);
+	var _axios = __webpack_require__(179);
 
 	var _axios2 = _interopRequireDefault(_axios);
 
@@ -23236,7 +23253,7 @@
 
 	      _axios2.default.post('/login', userInfo).then(function (result) {
 	        if (result) {
-	          _this2.props.userSignupLogin(result);
+	          _this2.props.userSignupLogin(result.data);
 	        } else {
 	          console.log('Incorrect Username or Password');
 	          _this2.setState({
@@ -23262,8 +23279,7 @@
 
 	      _axios2.default.post('/signup', userInfo).then(function (result) {
 	        if (result.data.created) {
-	          console.log("User Created Id:", result.data.id);
-	          self.props.userSignupLogin(result.data.id);
+	          self.props.userSignupLogin(result.data);
 	        } else {
 	          console.log('User already Taken', _this3.state.attempt);
 	          self.setState({
@@ -23277,11 +23293,13 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this4 = this;
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(
-	          'h1',
+	          'h3',
 	          null,
 	          'Login'
 	        ),
@@ -23307,7 +23325,7 @@
 	          )
 	        ),
 	        _react2.default.createElement(
-	          'h1',
+	          'h3',
 	          null,
 	          'Signup'
 	        ),
@@ -23331,6 +23349,13 @@
 	            { type: 'submit' },
 	            'Enter'
 	          )
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: function onClick() {
+	              return _this4.props.cancel();
+	            } },
+	          'Cancel'
 	        )
 	      );
 	    }
@@ -23342,65 +23367,7 @@
 	exports.default = UserLoginSignup;
 
 /***/ },
-/* 207 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var UserSession = function UserSession(_ref) {
-	  var user = _ref.user,
-	      logout = _ref.logout,
-	      loginSignup = _ref.loginSignup,
-	      createGame = _ref.createGame;
-
-	  if (user) {
-	    return _react2.default.createElement(
-	      "div",
-	      null,
-	      _react2.default.createElement(
-	        "button",
-	        { id: "logout", onClick: function onClick() {
-	            return logout();
-	          } },
-	        "Logout"
-	      ),
-	      _react2.default.createElement(
-	        "button",
-	        { id: "create-game", onClick: function onClick() {
-	            return createGame();
-	          } },
-	        "Create Game"
-	      )
-	    );
-	  } else {
-	    return _react2.default.createElement(
-	      "div",
-	      null,
-	      _react2.default.createElement(
-	        "button",
-	        { id: "login_signup", onClick: function onClick() {
-	            return loginSignup();
-	          } },
-	        "Login/Signup"
-	      )
-	    );
-	  }
-	};
-
-	exports.default = UserSession;
-
-/***/ },
-/* 208 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23415,11 +23382,164 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _game = __webpack_require__(209);
+	var _axios = __webpack_require__(179);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CreateGame = function (_Component) {
+	  _inherits(CreateGame, _Component);
+
+	  function CreateGame(props) {
+	    _classCallCheck(this, CreateGame);
+
+	    var _this = _possibleConstructorReturn(this, (CreateGame.__proto__ || Object.getPrototypeOf(CreateGame)).call(this, props));
+
+	    _this.state = {
+	      userId: _this.props.user,
+	      attempt: 0
+	    };
+	    _this.handleEventSubmit = _this.handleEventSubmit.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(CreateGame, [{
+	    key: 'handleEventSubmit',
+	    value: function handleEventSubmit(event) {
+	      var _this2 = this;
+
+	      event.preventDefault();
+
+	      var game = {
+	        title: document.getElementById("title").value,
+	        description: document.getElementById("description").value,
+	        sport: document.getElementById("sport").value,
+	        address: document.getElementById("street-address").value,
+	        city: document.getElementById("city").value,
+	        state: document.getElementById("state").value,
+	        zipcode: document.getElementById("zip").value
+	      };
+
+	      _axios2.default.post('/postEvent', game).then(function (result) {
+	        if (result.data.created) {
+	          _this2.props.changeView();
+	        } else {
+	          _this2.setState({
+	            attempt: attempt++
+	          });
+	        }
+	      }).catch(function (err) {
+	        console.log('Error posting event', err);
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this3 = this;
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Enter game information'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { id: 'user-game-input-form', onSubmit: this.handleEventSubmit },
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            ' Title:',
+	            _react2.default.createElement('input', { id: 'title', type: 'text', required: true })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            ' Description:',
+	            _react2.default.createElement('input', { id: 'description', type: 'text' })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            ' Sport:',
+	            _react2.default.createElement('input', { id: 'sport', type: 'text', required: true })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            ' Street Address:',
+	            _react2.default.createElement('input', { id: 'street-address', type: 'text', required: true })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            ' City:',
+	            _react2.default.createElement('input', { id: 'city', type: 'text', required: true })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            ' State:',
+	            _react2.default.createElement('input', { id: 'state', type: 'text', required: true })
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            null,
+	            ' Zipcode:',
+	            _react2.default.createElement('input', { id: 'zip', type: 'text', required: true })
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { type: 'submit' },
+	            'Submit Game'
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { onClick: function onClick(e) {
+	                e.preventDefault();_this3.props.changeView();
+	              } },
+	            'Cancel'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return CreateGame;
+	}(_react.Component);
+
+	exports.default = CreateGame;
+
+/***/ },
+/* 206 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _game = __webpack_require__(207);
 
 	var _game2 = _interopRequireDefault(_game);
 
-	var _axios = __webpack_require__(181);
+	var _axios = __webpack_require__(179);
 
 	var _axios2 = _interopRequireDefault(_axios);
 
@@ -23490,10 +23610,10 @@
 	exports.default = Games;
 
 /***/ },
-/* 209 */
+/* 207 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -23506,207 +23626,181 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Game = function Game(_ref) {
-	  var game = _ref.game;
+	  var game = _ref.game,
+	      index = _ref.index,
+	      handleDelete = _ref.handleDelete;
 
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    _react2.default.createElement(
-	      'h3',
-	      null,
-	      game.title
-	    ),
-	    _react2.default.createElement(
-	      'p',
-	      null,
-	      game.description
-	    ),
-	    _react2.default.createElement(
-	      'div',
-	      null,
-	      'Address',
+
+	  if (handleDelete) {
+	    return _react2.default.createElement(
+	      "div",
+	      { className: "container" },
 	      _react2.default.createElement(
-	        'p',
+	        "h3",
 	        null,
-	        game.address
+	        game.title
 	      ),
 	      _react2.default.createElement(
-	        'p',
+	        "p",
 	        null,
-	        game.city
+	        game.description
 	      ),
 	      _react2.default.createElement(
-	        'p',
+	        "div",
 	        null,
-	        game.state
+	        "Address",
+	        _react2.default.createElement(
+	          "p",
+	          null,
+	          game.address
+	        ),
+	        _react2.default.createElement(
+	          "p",
+	          null,
+	          game.city
+	        ),
+	        _react2.default.createElement(
+	          "p",
+	          null,
+	          game.state
+	        ),
+	        _react2.default.createElement(
+	          "p",
+	          null,
+	          game.zip
+	        )
 	      ),
 	      _react2.default.createElement(
-	        'p',
+	        "h4",
 	        null,
-	        game.zip
+	        game.sport
+	      ),
+	      _react2.default.createElement(
+	        "button",
+	        { onClick: function onClick() {
+	            return handleDelete(game._id, index);
+	          } },
+	        "Delete Game"
 	      )
-	    ),
-	    _react2.default.createElement(
-	      'h4',
-	      null,
-	      game.sport
-	    )
-	  );
+	    );
+	  } else {
+	    return _react2.default.createElement(
+	      "div",
+	      { className: "container" },
+	      _react2.default.createElement(
+	        "h3",
+	        null,
+	        game.title
+	      ),
+	      _react2.default.createElement(
+	        "p",
+	        null,
+	        game.description
+	      ),
+	      _react2.default.createElement(
+	        "div",
+	        null,
+	        "Address",
+	        _react2.default.createElement(
+	          "p",
+	          null,
+	          game.address
+	        ),
+	        _react2.default.createElement(
+	          "p",
+	          null,
+	          game.city
+	        ),
+	        _react2.default.createElement(
+	          "p",
+	          null,
+	          game.state
+	        ),
+	        _react2.default.createElement(
+	          "p",
+	          null,
+	          game.zip
+	        )
+	      ),
+	      _react2.default.createElement(
+	        "h4",
+	        null,
+	        game.sport
+	      )
+	    );
+	  }
 	};
 
 	exports.default = Game;
 
 /***/ },
-/* 210 */
+/* 208 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _axios = __webpack_require__(181);
-
-	var _axios2 = _interopRequireDefault(_axios);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	var UserSession = function UserSession(_ref) {
+	  var user = _ref.user,
+	      logout = _ref.logout,
+	      loginSignup = _ref.loginSignup,
+	      createGame = _ref.createGame,
+	      viewUserGames = _ref.viewUserGames;
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var CreateGame = function (_Component) {
-	  _inherits(CreateGame, _Component);
-
-	  function CreateGame(props) {
-	    _classCallCheck(this, CreateGame);
-
-	    var _this = _possibleConstructorReturn(this, (CreateGame.__proto__ || Object.getPrototypeOf(CreateGame)).call(this, props));
-
-	    _this.state = {
-	      userId: _this.props.user,
-	      attempt: 0
-	    };
-	    _this.handleEventSubmit = _this.handleEventSubmit.bind(_this);
-	    return _this;
+	  if (user) {
+	    return _react2.default.createElement(
+	      "div",
+	      null,
+	      _react2.default.createElement(
+	        "button",
+	        { id: "logout", onClick: function onClick() {
+	            return logout();
+	          } },
+	        "Logout"
+	      ),
+	      _react2.default.createElement(
+	        "button",
+	        { id: "create-game", onClick: function onClick() {
+	            return createGame();
+	          } },
+	        "Create Game"
+	      ),
+	      _react2.default.createElement(
+	        "button",
+	        { id: "view-user-games", onClick: function onClick() {
+	            return viewUserGames();
+	          } },
+	        "My Games"
+	      )
+	    );
+	  } else {
+	    return _react2.default.createElement(
+	      "div",
+	      null,
+	      _react2.default.createElement(
+	        "button",
+	        { id: "login_signup", onClick: function onClick() {
+	            return loginSignup();
+	          } },
+	        "Login/Signup"
+	      )
+	    );
 	  }
+	};
 
-	  _createClass(CreateGame, [{
-	    key: 'handleEventSubmit',
-	    value: function handleEventSubmit(event) {
-	      var _this2 = this;
-
-	      event.preventDefault();
-	      console.log('clicked');
-
-	      var game = {
-	        title: document.getElementById("title").value,
-	        description: document.getElementById("description").value,
-	        sport: document.getElementById("sport").value,
-	        address: document.getElementById("street-address").value,
-	        city: document.getElementById("city").value,
-	        state: document.getElementById("state").value,
-	        zipcode: document.getElementById("zip").value
-	      };
-
-	      _axios2.default.post('/postEvent', game).then(function (result) {
-	        if (result.data.created) {
-	          _this2.props.changeView();
-	        } else {
-	          _this2.setState({
-	            attempt: attempt++
-	          });
-	        }
-	      }).catch(function (err) {
-	        console.log('Error posting event', err);
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this3 = this;
-
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'form',
-	          { id: 'user-game-input-form', onSubmit: this.handleEventSubmit },
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            ' Title:',
-	            _react2.default.createElement('input', { id: 'title', type: 'text' })
-	          ),
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            ' Description:',
-	            _react2.default.createElement('textarea', { id: 'description', type: 'text' })
-	          ),
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            ' Sport:',
-	            _react2.default.createElement('textarea', { id: 'sport', type: 'text' })
-	          ),
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            ' Street Address:',
-	            _react2.default.createElement('input', { id: 'street-address', type: 'text' })
-	          ),
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            ' City:',
-	            _react2.default.createElement('input', { id: 'city', type: 'text' })
-	          ),
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            ' State:',
-	            _react2.default.createElement('input', { id: 'state', type: 'text' })
-	          ),
-	          _react2.default.createElement(
-	            'label',
-	            null,
-	            ' Zipcode:',
-	            _react2.default.createElement('input', { id: 'zip', type: 'text' })
-	          ),
-	          _react2.default.createElement(
-	            'button',
-	            { type: 'submit' },
-	            'Submit Game'
-	          ),
-	          _react2.default.createElement(
-	            'button',
-	            { onClick: function onClick() {
-	                return _this3.props.changeView();
-	              } },
-	            'Cancel'
-	          )
-	        )
-	      );
-	    }
-	  }]);
-
-	  return CreateGame;
-	}(_react.Component);
-
-	exports.default = CreateGame;
+	exports.default = UserSession;
 
 /***/ },
-/* 211 */
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -23755,6 +23849,127 @@
 	};
 
 	exports.default = GameSearch;
+
+/***/ },
+/* 210 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(179);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _game = __webpack_require__(207);
+
+	var _game2 = _interopRequireDefault(_game);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var UserGames = function (_Component) {
+	  _inherits(UserGames, _Component);
+
+	  function UserGames(props) {
+	    _classCallCheck(this, UserGames);
+
+	    var _this = _possibleConstructorReturn(this, (UserGames.__proto__ || Object.getPrototypeOf(UserGames)).call(this, props));
+
+	    _this.state = {
+	      userId: false,
+	      games: []
+	    };
+	    _this.componentWillMount = _this.componentWillMount.bind(_this);
+	    _this.handleGameDeletion = _this.handleGameDeletion.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(UserGames, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      var _this2 = this;
+
+	      _axios2.default.get('/userGames').then(function (res) {
+	        _this2.setState({
+	          userId: res.data.id,
+	          games: res.data.games
+	        });
+	      }).catch(function (err) {
+	        console.log(err);
+	      });
+	    }
+	  }, {
+	    key: 'handleGameDeletion',
+	    value: function handleGameDeletion(gameId, index) {
+	      var _this3 = this;
+
+	      _axios2.default.post('/deleteGame', { game: gameId }).then(function () {
+	        _this3.state.games.splice(index, 1);
+	        _this3.setState({
+	          games: _this3.state.games
+	        });
+	      }).catch(function (error) {
+	        console.log('Error deleting game', error);
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this4 = this;
+
+	      if (this.state.userId) {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'h3',
+	            null,
+	            'My Games'
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { onClick: function onClick() {
+	                return _this4.props.home();
+	              } },
+	            'Home'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            null,
+	            this.state.games.map(function (eachGame, idx) {
+	              return _react2.default.createElement(_game2.default, {
+	                game: eachGame,
+	                key: eachGame._id,
+	                index: idx,
+	                handleDelete: _this4.handleGameDeletion });
+	            })
+	          )
+	        );
+	      } else {
+	        return _react2.default.createElement('div', null);
+	      }
+	    }
+	  }]);
+
+	  return UserGames;
+	}(_react.Component);
+
+	exports.default = UserGames;
 
 /***/ }
 /******/ ]);

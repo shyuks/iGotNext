@@ -11,7 +11,6 @@ class UserLoginSignup extends Component {
     this.handleUserSignup = this.handleUserSignup.bind(this);
   }
 
-
   handleUserLogin(event){
 
     event.preventDefault();
@@ -24,7 +23,7 @@ class UserLoginSignup extends Component {
     axios.post('/login', userInfo)
     .then(result => {
       if (result) {
-        this.props.userSignupLogin(result);
+        this.props.userSignupLogin(result.data);
       } else {
         console.log('Incorrect Username or Password');
         this.setState({
@@ -49,8 +48,7 @@ class UserLoginSignup extends Component {
     axios.post('/signup', userInfo)
     .then(result => {
       if (result.data.created) {
-        console.log("User Created Id:", result.data.id);
-        self.props.userSignupLogin(result.data.id);
+        self.props.userSignupLogin(result.data);
       } else {
         console.log('User already Taken', this.state.attempt);
         self.setState({
@@ -63,12 +61,10 @@ class UserLoginSignup extends Component {
     })
   }
 
-
-
   render(){
     return (
       <div>
-        <h1>Login</h1>
+        <h3>Login</h3>
         <form id="user-login" onSubmit={this.handleUserLogin}>
           <label>Username
             <input id="login-username-input"/>
@@ -79,7 +75,7 @@ class UserLoginSignup extends Component {
           <button type="submit">Enter</button>
         </form>
 
-        <h1>Signup</h1>
+        <h3>Signup</h3>
         <form id="user-signup" onSubmit={this.handleUserSignup}>
           <label>Username
             <input id="signup-username-input"/>
@@ -89,10 +85,11 @@ class UserLoginSignup extends Component {
           </label>
           <button type="submit">Enter</button>
         </form>
+
+        <button onClick={()=>this.props.cancel()}>Cancel</button>
       </div>
     )
   }
 }
-
 
 export default UserLoginSignup;
